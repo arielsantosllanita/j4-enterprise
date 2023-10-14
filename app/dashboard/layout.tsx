@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FileOutlined,
   PieChartOutlined,
@@ -12,6 +12,7 @@ import {
 import type { MenuProps } from "antd";
 import { Button, Dropdown, Layout, Menu, theme } from "antd";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -57,6 +58,16 @@ export default function DashboardLayout({
     token: { colorBgContainer },
   } = theme.useToken();
   const [collapsed, setCollapsed] = useState(false);
+  const [menuItems, setMenuItems] = useState(items);
+  const { data: session, status }: any = useSession();
+
+  useEffect(() => {
+    if (!session?.user.roles.includes("admin")) {
+      setMenuItems(items.filter((x) => x?.key != "/dashboard/products"));
+    }
+    return () => setMenuItems(items);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status])
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -78,7 +89,7 @@ export default function DashboardLayout({
           theme="dark"
           defaultSelectedKeys={["1"]}
           mode="inline"
-          items={items}
+          items={menuItems}
         />
       </Layout.Sider>
 
@@ -102,7 +113,10 @@ export default function DashboardLayout({
                 placement="bottomRight"
                 arrow
               >
-                <Button icon={<MenuFoldOutlined />} type="text" size="large" />
+                {/* <Button icon={<MenuFoldOutlined />} type="text" size="large" /> */}
+                <Button>
+                  Hi, {session?.user?.firstName}
+                </Button>
               </Dropdown>
             </div>
           </div>
