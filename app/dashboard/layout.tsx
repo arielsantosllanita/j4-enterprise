@@ -32,20 +32,25 @@ const items: MenuItem[] = [
     icon: <FileOutlined />,
   },
   {
-    label: "Products",
+    label: <Link href={"/dashboard/products"}>Products</Link>,
     key: "/dashboard/products",
     icon: <TagOutlined />,
-    children: [
-      {
-        label: <Link href={"/dashboard/products/units"}>Units</Link>,
-        key: "/dashboard/products/units",
-      },
-      {
-        label: <Link href={"/dashboard/products/suppliers"}>Suppliers</Link>,
-        key: "/dashboard/products/suppliers",
-      },
-    ],
   },
+  // {
+  //   label: "Products",
+  //   key: "/dashboard/products",
+  //   icon: <TagOutlined />,
+  //   children: [
+  //     {
+  //       label: <Link href={"/dashboard/products/units"}>Units</Link>,
+  //       key: "/dashboard/products/units",
+  //     },
+  //     {
+  //       label: <Link href={"/dashboard/products/suppliers"}>Suppliers</Link>,
+  //       key: "/dashboard/products/suppliers",
+  //     },
+  //   ],
+  // },
 ];
 
 export default function DashboardLayout({
