@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-// import './models/user.model';
-// import './models/customer.model';
-// import './models/pbrand.mode';
-// import './models/products.model';
+import './models/user.model';
+import './models/customer.model';
+import './models/pbrand.mode';
+import './models/products.model';
 
 declare global {
   var mongoose: any; // This must be a `var` and not a `let / const`
