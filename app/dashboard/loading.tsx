@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Spin } from "antd";
 import React from "react";
@@ -10,7 +10,7 @@ export default function Loading({}: Props) {
     <div
       style={{
         display: "flex",
-        height: "100vh",
+        height: "calc(100vh - 70px)",
         justifyContent: "center",
         alignItems: "center",
       }}

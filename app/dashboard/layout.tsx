@@ -7,7 +7,6 @@ import {
   TeamOutlined,
   LogoutOutlined,
   TagOutlined,
-  MenuFoldOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Button, Dropdown, Layout, Menu, theme } from "antd";
@@ -113,7 +112,6 @@ export default function DashboardLayout({
                 placement="bottomRight"
                 arrow
               >
-                {/* <Button icon={<MenuFoldOutlined />} type="text" size="large" /> */}
                 <Button>
                   Hi, {session?.user?.firstName}
                 </Button>

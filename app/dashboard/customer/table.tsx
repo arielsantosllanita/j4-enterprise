@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import { Table } from "antd";
+import { Button, Popconfirm, Space, Table, Typography, message } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { Customer } from "@/db/models/customer.model";
 import _ from "lodash";
+import Link from "next/link";
+import { UserAddOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
+import { deleteCustomer } from "./actions";
 
 // const onChange: TableProps<Customer>["onChange"] = (
 //   pagination,
@@ -16,6 +20,8 @@ import _ from "lodash";
 // };
 
 const CustomerTable = ({ customers }: { customers: Customer[] }) => {
+  const router = useRouter();
+
   const columns: ColumnsType<Customer> = [
     {
       title: "Name",
@@ -26,18 +32,15 @@ const CustomerTable = ({ customers }: { customers: Customer[] }) => {
       onFilter: (value: any, record) => record.name.startsWith(value),
       // width: '30%',
     },
-    // {
-    //   title: 'Age',
-    //   dataIndex: 'age',
-    //   sorter: (a, b) => a.age - b.age,
-    // },
     {
       title: "Address",
       dataIndex: "address",
-      // filters: _.uniqBy(customers.map((x) => ({ text: x.address, value: x.address })), 'value'),
-      // filters: customers.map((x) => ({ text: x.address, value: x.address })),
-      // onFilter: (value: any, record) => record.address.startsWith(value),
-      // filterSearch: true,
+      filters: _.uniqBy(
+        customers.map((x) => ({ text: x.address, value: x.address })),
+        "value"
+      ),
+      onFilter: (value: any, record) => record.address.startsWith(value),
+      filterSearch: true,
     },
     {
       title: "Mobile Number",
@@ -57,10 +60,47 @@ const CustomerTable = ({ customers }: { customers: Customer[] }) => {
         );
       },
     },
+    {
+      title: "Action",
+      render: (_, record) => (
+        <Space size="middle">
+          <Link href={`/dashboard/customer/edit?id=${record._id}`}>Edit</Link>
+
+          <Popconfirm
+            title="Delete"
+            description="Are you sure to delete this customer?"
+            onConfirm={async () => {
+              await deleteCustomer(record._id);
+              message.success("Deleted successfully!");
+            }}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Typography.Text type="danger" style={{ cursor: "pointer" }}>
+              <Button type="link" danger>
+                Delete
+              </Button>
+            </Typography.Text>
+          </Popconfirm>
+        </Space>
+      ),
+    },
   ];
 
   return (
     <Table
+      title={() => (
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h3 style={{ margin: 0 }}>Customers</h3>
+          <Button
+            type="primary"
+            icon={<UserAddOutlined />}
+            onClick={() => router.push("/dashboard/customer/add")}
+          >
+            Add
+          </Button>
+        </div>
+      )}
       scroll={{ x: true }}
       rowKey={(record) => record._id}
       columns={columns}

@@ -1,20 +1,19 @@
-import React from "react";
 import { addCustomer, updateCustomer } from "../actions";
 import customerModel, { Customer } from "@/db/models/customer.model";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
+import Form from "./form";
 
 type Props = {
-  params: { type: string };
+  params: { type: 'add' | 'edit' };
   searchParams: { id: string };
 };
 
 async function fetchCustomer(id: string): Promise<any> {
   if (!id) return null;
-
-  let data = await customerModel.findById(id).lean();
+  let data: Customer | null = await customerModel.findById(id, '-addedBy').lean();
   if (!data) return null;
-
-  // data._id = String(data._id);
+  data._id = String(data._id);
+  
   return data;
 }
 
@@ -23,10 +22,18 @@ export default async function New({
   searchParams: { id },
 }: Props) {
   if (!["add", "edit"].includes(type)) return notFound();
-  
+
   const defaultData = await fetchCustomer(id);
 
-  return (
+  if (type == "edit" && !defaultData) {
+    redirect("/dashboard/customer");
+  }
+
+  return <Form defaultData={defaultData} type={type} />
+}
+
+/* 
+return (
     <div className="w-11/12 md:w-3/4 lg:w-2/4 mx-auto">
       <form action={type == "edit" ? updateCustomer: addCustomer}>
         <div className="mt-4 flex flex-col space-y-3">
@@ -107,18 +114,12 @@ export default async function New({
             />
           </div>
 
-          {/* <div className="form-control">
-            <label className="label cursor-pointer">
-              <span className="label-text">Default</span>
-              <input type="checkbox" name="default" className="toggle" />
-            </label>
-          </div> */}
-        </div>
+          </div>
 
-        <button className="btn btn-block btn-neutral mt-3" type="submit">
-          Submit
-        </button>
-      </form>
-    </div>
-  );
-}
+          <button className="btn btn-block btn-neutral mt-3" type="submit">
+            Submit
+          </button>
+        </form>
+      </div>
+    );
+*/
