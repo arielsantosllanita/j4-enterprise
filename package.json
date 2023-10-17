@@ -21,6 +21,7 @@
     "next-cloudinary": "^4.24.1",
     "react": "^18",
     "react-dom": "^18",
+    "twilio": "^4.18.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {

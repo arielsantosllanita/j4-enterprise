@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOptions";
-import productsModel from "@/db/models/products.model";
+import productsModel, { Product } from "@/db/models/products.model";
 import { getServerSession } from "next-auth";
 import { notFound, redirect } from "next/navigation";
 import React from "react";
@@ -13,8 +13,10 @@ type Props = {
 async function fetchProduct(id: string): Promise<any> {
   if (!id) return null;
 
-  let data = await productsModel.findById(id).lean();
+  let data: Product | null = await productsModel.findById(id).lean();
   if (!data) return null;
+
+  data._id = String(data._id);
 
   return data;
 }
@@ -30,5 +32,5 @@ export default async function Page({
 
   const defaultData = await fetchProduct(id);
 
-  return <ProductsForm defaultData={defaultData} type={type} />
+  return <ProductsForm defaultData={defaultData} type={type} />;
 }

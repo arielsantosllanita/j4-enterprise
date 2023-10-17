@@ -61,6 +61,8 @@ const ProductsTable = ({ products }: { products: Product[] }) => {
               </Button>
             </Typography.Text>
           </Popconfirm>
+
+          <Link href={`/dashboard/products/stocks?id=${record._id}`}>Stocks</Link>
         </Space>
       ),
     },
